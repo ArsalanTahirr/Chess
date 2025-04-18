@@ -1,9 +1,12 @@
+#pragma once
+
 #include <iostream>
 #include <vector>
 #include <string>
 #include <algorithm>
 #include <cctype>
 #include <utility>
+#include <windows.h>
 #include "Board.h"
 #include "Enums.h"
 #include "Piece.h"
@@ -18,3 +21,4 @@
 #include "Rook.h"
 #include "Queen.h"
 #include "King.h"
+using namespace std;
