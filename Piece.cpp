@@ -23,6 +23,8 @@ Position Piece::getPosition() const { return position; }
 
 void Piece::setPosition(int row, int col) { position.setCoordinate(row, col); }
 
+std::string Piece::getSymbolForBoard() const { return symbolForBoard; }
+
 bool Piece::canMove(const Position& to, Board* board) const {
     std::vector<Position> ValidMoves = getValidMoves(board);
     bool flag = false;
@@ -34,6 +36,8 @@ bool Piece::canMove(const Position& to, Board* board) const {
     }
     return flag;
 }
+
+char Piece::getPieceCharacter() const { return character; }
 
 std::string Piece::getPieceSymbol(char piece) const {
     switch (piece) {

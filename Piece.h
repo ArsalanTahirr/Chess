@@ -26,4 +26,6 @@ public:
     bool canMove(const Position& to, Board* board) const;
     virtual std::vector<Position> getValidMoves(Board* board) const = 0;
     std::string getPieceSymbol(char piece) const;
+    std::string getSymbolForBoard() const;
+    char getPieceCharacter() const;
 };
