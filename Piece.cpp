@@ -4,6 +4,7 @@
 #include "Position.h"
 #include "Board.h"
 #include "Enums.h"
+#include "GlobalVariables.h"
 
 Piece::Piece(Color color, const char character, const Position& position) :
 color(color), position(position), isCaptured(false) {
@@ -55,4 +56,13 @@ std::string Piece::getPieceSymbol(char piece) const {
         case 'p': return "♟";
         default:  return " ";
     }
+}
+
+bool Piece::isInBounds(const Position& pos) const {
+    return (pos.getRow() >= 0 && pos.getRow() < BOARD_ROWS &&
+            pos.getColumn() >= 0 && pos.getColumn() < BOARD_COLS);
+}
+
+bool Piece::isInBounds(int row, int column) const {
+    return (row >= 0 && row < BOARD_ROWS && column >= 0 && column < BOARD_COLS);
 }
