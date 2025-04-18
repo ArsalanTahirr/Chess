@@ -8,11 +8,11 @@ class Piece;
 
 class Player {
 private:
-    Color color;
     std::string name;
+    Color color;
     std::vector<Piece*> capturedPieces;
 public:
-    Player(Color color, const std::string& name);
+    Player(const std::string& name, Color color);
     ~Player();
     Color getColor() const;
     std::string getName() const;

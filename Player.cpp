@@ -2,9 +2,13 @@
 #include "Piece.h"
 #include "Player.h"
 
-Player::Player(Color color, const std::string& name): color(color), name(name) {}
+Player::Player(const std::string& name, Color color): name(name), color(color) {}
 
-Player::~Player() {}
+Player::~Player() {
+    for(Piece* piece : capturedPieces) {
+        delete piece;
+    }
+}
 
 Color Player::getColor() const { return color; }
 
