@@ -29,8 +29,7 @@ std::vector<Position> Queen::getValidMoves(Board* board) const {
             newRow += dir[0];
             newCol += dir[1];
             
-            if (newRow < 0 || newRow >= BOARD_ROWS || 
-                newCol < 0 || newCol >= BOARD_COLS) {
+            if (!isInBounds(newRow, newCol)) {
                 break;
             }
             
