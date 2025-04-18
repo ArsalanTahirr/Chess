@@ -25,7 +25,7 @@ std::vector<Position> King::getValidMoves(Board* board) const {
         int newRow = row + dir[0];
         int newCol = col + dir[1];
         Position newPosition(newRow, newCol);
-        if (newRow < 0 || newRow >= BOARD_ROWS || newCol < 0 || newCol >= BOARD_COLS) {
+        if (!isInBounds(newRow, newCol)) {
             continue;
         }
         bool flag = false;
@@ -39,11 +39,8 @@ std::vector<Position> King::getValidMoves(Board* board) const {
             continue;
         }
         Piece *piece = board->getPiece(newPosition);
-        if(!piece) {
-            ValidMoves.push_back(Position(newRow, newCol));
-        }
-        else if(piece->getColor() != color) {
-            ValidMoves.push_back(Position(newRow, newCol));
+        if (!piece || piece->getColor() != color) {
+            ValidMoves.push_back(newPosition);
         }
     }
     return ValidMoves;
