@@ -11,6 +11,7 @@
 #include "King.h"
 #include "Pawn.h"
 #include "Enums.h"
+#include "Player.h"
 #include "GlobalVariables.h"
 
 Board::Board() {}
@@ -57,11 +58,18 @@ void Board::initializeBoard() {
 
 Piece* Board::getPiece(const Position& position) const { return squares[position.getRow()][position.getColumn()].getPiece(); }
 
-void Board::placePiece(Piece *piece, const Position& position) { squares[position.getRow()][position.getColumn()].setPiece(piece); }
+void Board::placePiece(Piece *piece, const Position& position, Player& player) {
+    if(isSquareOccupied(position)) {
+        player.addCapturedPiece(getPiece(position)); // Add captured piece to player
+        removePiece(position); // Remove existing piece if occupied
+    }
+    squares[position.getRow()][position.getColumn()].setPiece(piece); 
+    piece->setPosition(position.getRow(), position.getColumn()); // Update piece position
+}
 
-void Board::removePiece(const Position& position) { placePiece(nullptr, position); }
+void Board::removePiece(const Position& position) { squares[position.getRow()][position.getColumn()].setPiece(nullptr); }
 
-bool Board::isSquareOccupied(const Position& position) const { return !getPiece(position);}
+bool Board::isSquareOccupied(const Position& position) const { return getPiece(position);}
 
 std::vector<Piece*> Board::getAllPieces() const {
     std::vector<Piece*> pieces;

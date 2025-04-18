@@ -6,6 +6,7 @@
 #include <windows.h>
 
 class Piece;
+class Player;
 
 class Board {
 private:
@@ -17,7 +18,7 @@ public:
     ~Board();
     void initializeBoard();
     Piece* getPiece(const Position& position) const;
-    void placePiece(Piece *piece, const Position& position);
+    void placePiece(Piece *piece, const Position& position, Player& player);
     void removePiece(const Position& position);
     void printBoard() const;
     bool isSquareOccupied(const Position& position) const;
