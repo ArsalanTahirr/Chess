@@ -22,10 +22,12 @@ public:
     Position getPosition() const;
     void setPosition(int row, int col);
     bool getisCaptured() const;
+    char getPieceCharacter() const;
     void setisCaptured(bool captured);
     bool canMove(const Position& to, Board* board) const;
     virtual std::vector<Position> getValidMoves(Board* board) const = 0;
     std::string getPieceSymbol(char piece) const;
     std::string getSymbolForBoard() const;
-    char getPieceCharacter() const;
+    bool isInBounds(const Position& pos) const;
+    bool isInBounds(int row, int column) const;
 };
