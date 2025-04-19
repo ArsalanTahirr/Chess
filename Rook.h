@@ -11,5 +11,7 @@ private:
 public:
     Rook(Color color, const char character, const Position& position);
     ~Rook();
+    void setHasMoved(bool moved);
+    bool getHasMoved() const;
     std::vector<Position> getValidMoves(Board* board) const override;
 };
