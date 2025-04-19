@@ -65,6 +65,24 @@ void Board::placePiece(Piece *piece, const Position& position, Player& player) {
     }
     squares[position.getRow()][position.getColumn()].setPiece(piece); 
     piece->setPosition(position.getRow(), position.getColumn()); // Update piece position
+    if(piece->getPieceCharacter() == 'P' || piece->getPieceCharacter() == 'p') {
+        Pawn* pawn = dynamic_cast<Pawn*>(piece);
+        if(pawn) {
+            pawn->setHasMoved(true); // Set hasMoved to true for pawn
+        }
+    } 
+    else if(piece->getPieceCharacter() == 'R' || piece->getPieceCharacter() == 'r') {
+        Rook* rook = dynamic_cast<Rook*>(piece);
+        if(rook) {
+            rook->setHasMoved(true); // Set hasMoved to true for rook
+        }
+    } 
+    else if(piece->getPieceCharacter() == 'K' || piece->getPieceCharacter() == 'k') {
+        King* king = dynamic_cast<King*>(piece);
+        if(king) {
+            king->setHasMoved(true); // Set hasMoved to true for king
+        }
+    }
 }
 
 void Board::removePiece(const Position& position) { squares[position.getRow()][position.getColumn()].setPiece(nullptr); }
