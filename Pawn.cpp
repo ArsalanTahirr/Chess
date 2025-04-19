@@ -7,6 +7,14 @@ Piece(color, character, position), hasMoved(false) {}
 
 Pawn::~Pawn() {}
 
+void Pawn::setHasMoved(bool moved) {
+    hasMoved = moved;
+}
+
+bool Pawn::getHasMoved() const {
+    return hasMoved;
+}
+
 std::vector<Position> Pawn::getValidMoves(Board* board) const {
     std::vector<Position> validMoves;
     int row = position.getRow();

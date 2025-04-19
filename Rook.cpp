@@ -7,6 +7,14 @@ Piece(color, character, position), hasMoved(false) {}
 
 Rook::~Rook() {}
 
+void Rook::setHasMoved(bool moved) {
+    hasMoved = moved;
+}
+
+bool Rook::getHasMoved() const {
+    return hasMoved;
+}
+
 std::vector<Position> Rook::getValidMoves(Board* board) const {
     std::vector<Position> validMoves;
     int row = position.getRow();

@@ -13,7 +13,8 @@ protected:
     Color color;
     Position position;
     bool isCaptured;
-    char character;
+    char character; // N , K , Q , B , R , P // black pieces are lower case
+    // white pieces are upper case
     std::string symbolForBoard;
 public:
     Piece(Color color, const char character, const Position& position);

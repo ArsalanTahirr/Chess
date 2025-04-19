@@ -11,6 +11,8 @@ private:
 public:
     King(Color color, const char character, const Position& position);
     ~King();
+    void setHasMoved(bool moved);
+    bool getHasMoved() const;
     std::vector<Position> getValidMoves(Board* board) const override;
     bool canCastle() const;
 };

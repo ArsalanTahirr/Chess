@@ -46,6 +46,14 @@ std::vector<Position> King::getValidMoves(Board* board) const {
     return ValidMoves;
 }
 
+void King::setHasMoved(bool moved) {
+    hasMoved = moved;
+}
+
+bool King::getHasMoved() const {
+    return hasMoved;
+}
+
 bool King::canCastle() const {
     return !hasMoved;
 }
