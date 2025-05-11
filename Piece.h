@@ -17,6 +17,9 @@ protected:
     // white pieces are upper case
     std::string symbolForBoard;
     PieceType type;
+    char file;
+    char rank;
+    // The file and rank are used to determine the position of the piece on the board
 public:
     Piece(Color color, const char character, const Position& position);
     virtual ~Piece();
@@ -39,4 +42,8 @@ public:
     std::string getSymbolForBoard() const;
     bool isInBounds(const Position& pos) const;
     bool isInBounds(int row, int column) const;
+    char getFile() const;
+    char getRank() const;
+    void setFile(char file);
+    void setRank(char rank);
 };

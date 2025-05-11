@@ -2,9 +2,9 @@
 #include "Move.h"
 #include "Piece.h"
 
-Move::Move(const Position& from, const Position& to, Piece* pieceMoved, Piece* pieceCaptured):
-    from(from), to(to), pieceMoved(pieceMoved), pieceCaptured(pieceCaptured),
-    isCheck(false), isCheckmate(false), isPromotion(false), isCastling(false), isEnPassant(false) {}
+Move::Move(): from(Position(-1, -1)), to(Position(-1, -1)), pieceMoved(nullptr), pieceCaptured(nullptr),
+        isPromotion(false), isCastlingKingSide(false), isCastlingQueenSide(false),
+        pieceType(PieceType::None) {}
 
 Move::~Move() {}
 
@@ -14,24 +14,28 @@ Position Move::getTo() const { return to; }
 
 Piece* Move::getPieceMoved() const { return pieceMoved; }
 
+PieceType Move::getPieceType() const { return pieceType; }
+
+void Move::setPieceType(PieceType type) { pieceType = type; }
+
 Piece* Move::getPieceCaptured() const { return pieceCaptured; }
-
-bool Move::getIsCheck() const { return isCheck; }
-
-bool Move::getIsCheckmate() const { return isCheckmate; }
 
 bool Move::getIsPromotion() const { return isPromotion; }
 
-bool Move::getIsCastling() const { return isCastling; }
+bool Move::getIsCastlingKingSide() const { return isCastlingKingSide; }
 
-bool Move::getIsEnPassant() const { return isEnPassant; }
-
-void Move::setIsCheck(bool check) { isCheck = check; }
-
-void Move::setIsCheckmate(bool checkmate) { isCheckmate = checkmate; }
+bool Move::getIsCastlingQueenSide() const { return isCastlingQueenSide; }
 
 void Move::setIsPromotion(bool promotion) { isPromotion = promotion; }
 
-void Move::setIsCastling(bool castling) { isCastling = castling; }
+void Move::setIsCastlingKingSide(bool castling) { isCastlingKingSide = castling; }
 
-void Move::setIsEnPassant(bool enPassant) { isEnPassant = enPassant; }
+void Move::setIsCastlingQueenSide(bool castling) { isCastlingQueenSide = castling; }
+
+void Move::setPieceMoved(Piece* piece) { pieceMoved = piece; }
+
+void Move::setPieceCaptured(Piece* piece) { pieceCaptured = piece; }
+
+void Move::setFrom(const Position& from) { this->from = from; }
+
+void Move::setTo(const Position& to) { this->to = to; }

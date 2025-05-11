@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Position.h"
+#include "Enums.h"
 
 class Piece;
 
@@ -10,26 +11,27 @@ private:
     Position to;
     Piece* pieceMoved;
     Piece* pieceCaptured;
-    bool isCheck;
-    bool isCheckmate;
+    PieceType pieceType;
     bool isPromotion;
-    bool isCastling;
-    bool isEnPassant;
+    bool isCastlingKingSide;
+    bool isCastlingQueenSide;
 public:
-    Move(const Position& from, const Position& to, Piece* pieceMoved, Piece* pieceCaptured);
+    Move();
     ~Move();
     Position getFrom() const;
     Position getTo() const;
     Piece* getPieceMoved() const;
     Piece* getPieceCaptured() const;
-    bool getIsCheck() const;
-    bool getIsCheckmate() const;
     bool getIsPromotion() const;
-    bool getIsCastling() const;
-    bool getIsEnPassant() const;
-    void setIsCheck(bool check);
-    void setIsCheckmate(bool checkmate);
+    bool getIsCastlingKingSide() const;
+    bool getIsCastlingQueenSide() const;
+    PieceType getPieceType() const;
     void setIsPromotion(bool promotion);
-    void setIsCastling(bool castling);
-    void setIsEnPassant(bool enPassant);
+    void setIsCastlingKingSide(bool castling);
+    void setIsCastlingQueenSide(bool castling);
+    void setPieceType(PieceType type);
+    void setPieceMoved(Piece* piece);
+    void setPieceCaptured(Piece* piece);
+    void setFrom(const Position& from);
+    void setTo(const Position& to);
 };

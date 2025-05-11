@@ -5,21 +5,23 @@
 class Move;
 class Board;
 class Piece;
-class MoveHistory;
+class StateString;
+class Player;
 
 class ChessRules {
 public:
     ChessRules();
     ~ChessRules();
-    //static bool isValidMove(Move* move, Board* board);
-    static bool isCheck(Color& color, Board* board, MoveHistory* moveHistory);
-    static bool isCheckmate(Color& color, Board* board, MoveHistory* moveHistory);
-    static bool isStalemate(Color& color, Board* board, MoveHistory* moveHistory);
+    static bool isCheck(Color color, Board* board);
+    static bool isCheckmate(Color color, Board* board);
+    static bool isStalemate(Color color, Board* board);
+    static bool canCastleKingSide(Color color, Board* board);
+    static bool canCastleQueenSide(Color color, Board* board);
     static bool isCastleLegal(Color color, Board*board, int moveDirection);
-    //static bool isDraw(MoveHistory& moveHistory, Board* board);
+    static std::pair<bool, std::string> isDraw(std::vector<StateString>& stateHistory, Board* board);
     static bool hasInsufficientMaterial(Board* board);
-    static bool hasThreefoldRepetition(Board* board);
-    // static void handleCastling(Move* move, Board* board);
-    // static void handleEnPassant(Move* move, Board* board);
-    // static void handlePromotion(Move* move, PieceType& type, Board* board);
+    static bool hasThreefoldRepetition(std::vector<StateString>& stateHistory);
+    static void handleCastlingKingSide(Player& player, Board* board);
+    static void handleCastlingQueenSide(Player& player, Board* board);
+    static void handlePromotion(Player& player, PieceType& type, Move* move, Board* board);
 };

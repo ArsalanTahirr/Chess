@@ -11,11 +11,15 @@ class Player;
 class Board {
 private:
     Square squares[8][8];
+    int halfMoveClock;
     void setColor(HANDLE console, bool isWhiteSquare, bool isWhitePiece, bool hasPiece) const;
     void resetColor(HANDLE console) const;
 public:
     Board();
     ~Board();
+    void setHalfMoveClock(int clock);
+    int getHalfMoveClock() const;
+    void setPiece(PieceType& pieceType, Color& color, const Position& position);
     void initializeBoard();
     Piece* getPiece(int row, int column) const;
     Piece* getPiece(const Position& position) const;
@@ -26,5 +30,6 @@ public:
     bool isSquareOccupied(const Position& position) const;
     std::vector<Piece*> getAllPieces() const;
     std::vector<Piece*> getAllPiecesOfColor(Color color) const;
+    std::vector<Piece*> getAllPiecesOfColorAndType(Color color, PieceType type) const;
     Position getKingPosition(Color color) const;
 };

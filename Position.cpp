@@ -13,6 +13,11 @@ void Position::setCoordinate(const int X, const int Y) {
     this->Y = Y;
 }
 
+void Position::setCoordinate(const Position& obj) {
+    this->X = obj.X;
+    this->Y = obj.Y;
+}
+
 bool Position::operator== (const Position& obj) const {
     return X == obj.X && Y == obj.Y;
 }

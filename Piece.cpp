@@ -40,6 +40,8 @@ color(color), position(position), isCaptured(false) {
             std::cerr << "Invalid piece character: " << character << std::endl;
             exit(1);
     }
+    char file = 'a' + position.X;
+    char rank = '1' + position.Y;
 }
 
 Piece::~Piece() {}
@@ -59,9 +61,15 @@ Position Piece::getPosition() const { return position; }
 void Piece::setPosition(const int X, const int Y) { 
     position.X = X; 
     position.Y = Y; 
+    this->file = 'a' + X;
+    this->rank = '1' + Y;
 }
 
-void Piece::setPosition(const Position& position) { this->position = position; }
+void Piece::setPosition(const Position& position) {
+    this->position = position;
+    this->file = 'a' + position.X;
+    this->rank = '1' + position.Y;
+}
 
 std::string Piece::getSymbolForBoard() const { return symbolForBoard; }
 
@@ -109,7 +117,7 @@ bool Piece::isInBounds(int row, int column) const {
 bool Piece::isPiecePinnedDiagonally(Board* board) const {
     // Get the king's position for the piece's color
     Position kingPos = board->getKingPosition(color);
-    
+
     // Check if the piece and king are on the same diagonal
     int deltaX = abs(kingPos.X - position.X);
     int deltaY = abs(kingPos.Y - position.Y);
@@ -231,3 +239,11 @@ bool Piece::isPiecePinnedVertically(Board* board) const {
     }
     return false; // Pawns cannot be pinned vertically
 }
+
+char Piece::getFile() const { return file; }
+
+char Piece::getRank() const { return rank; }
+
+void Piece::setFile(char file) { this->file = file; }
+
+void Piece::setRank(char rank) { this->rank = rank; }

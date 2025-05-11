@@ -43,7 +43,6 @@ std::vector<Position> Knight::getValidMoves(Board* board) const {
 }
 
 bool Knight::canAttack(const Position& to, Board* board) const {
-    std::vector<Position> validMoves;
     int row = position.X;
     int col = position.Y;
     
@@ -54,7 +53,8 @@ bool Knight::canAttack(const Position& to, Board* board) const {
         {-1, 2},  {1, 2}    // Right 2, up/down 1
     };
     
-    for (auto& dir : directions) {
+    // Directly check if the target position is attackable
+    for (const auto& dir : directions) {
         int newRow = row + dir[0];
         int newCol = col + dir[1];
 
@@ -64,16 +64,17 @@ bool Knight::canAttack(const Position& to, Board* board) const {
         }
             
         Position newPos(newRow, newCol);
-        Piece* pieceAtNewPos = board->getPiece(newPos);
         
-        if (pieceAtNewPos == nullptr || pieceAtNewPos->getColor() != color) {
-            validMoves.push_back(newPos);
+        // Check if this is the target position
+        if (newPos == to) {
+            Piece* pieceAtNewPos = board->getPiece(newPos);
+            
+            // Can attack if square is empty or has opponent's piece
+            if (pieceAtNewPos == nullptr || pieceAtNewPos->getColor() != color) {
+                return true;
+            }
         }
     }
-    for (const auto& move : validMoves) {
-        if (move == to) {
-            return true;
-        }
-    }
+    
     return false;
 }

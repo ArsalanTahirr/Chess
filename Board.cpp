@@ -14,7 +14,16 @@
 #include "Player.h"
 #include "GlobalVariables.h"
 
-Board::Board() {}
+Board::Board() : halfMoveClock(0) {
+    for (int i = 0; i < BOARD_ROWS; i++) {
+        for (int j = 0; j < BOARD_COLS; j++) {
+            squares[i][j].position.setCoordinate(i, j);
+            squares[i][j].piece = nullptr; // Initialize piece to nullptr
+            if((i + j) % 2 == 0) squares[i][j].color = Color::Black;
+            else squares[i][j].color = Color::White; 
+        }
+    }
+}
 
 Board::~Board() {
     for(int i = 0; i < BOARD_ROWS; i++) {
@@ -26,15 +35,26 @@ Board::~Board() {
     }
 }
 
+void Board::setHalfMoveClock(int clock) { halfMoveClock = clock; }
+
+int Board::getHalfMoveClock() const { return halfMoveClock; }
+
+void Board::setPiece(PieceType& pieceType, Color& color, const Position& position) {
+    if(pieceType == PieceType::Bishop)
+    squares[position.X][position.Y].piece = new Bishop(color, 'B', position);
+    if(pieceType == PieceType::Pawn)
+    squares[position.X][position.Y].piece = new Pawn(color, 'P', position);
+    if(pieceType == PieceType::King)
+    squares[position.X][position.Y].piece = new King(color, 'K', position);
+    if(pieceType == PieceType::Knight)
+    squares[position.X][position.Y].piece = new Knight(color, 'N', position);
+    if(pieceType == PieceType::Queen)
+    squares[position.X][position.Y].piece = new Queen(color, 'Q', position);
+    if(pieceType == PieceType::Rook)
+    squares[position.X][position.Y].piece = new Rook(color, 'R', position);
+}
+
 void Board::initializeBoard() {
-    for (int i = 0; i < BOARD_ROWS; i++) {
-        for (int j = 0; j < BOARD_COLS; j++) {
-            squares[i][j].position.setCoordinate(i, j);
-            squares[i][j].piece = nullptr; // Initialize piece to nullptr
-            if((i + j) % 2 == 0) squares[i][j].color = Color::Black;
-            else squares[i][j].color = Color::White; 
-        }
-    }
     squares[0][7].piece = new Rook(Color::Black, 'r', Position(0, 7)); // Example piece placement
     squares[1][7].piece = new Knight(Color::Black, 'n', Position(1, 7)); // Example piece placement
     squares[2][7].piece = new Bishop(Color::Black, 'b', Position(2, 7)); // Example piece placement
@@ -67,9 +87,13 @@ Piece* Board::getPiece(const Position& position) const { return squares[position
 Piece* Board::getPiece(int row, int column) const { return squares[row][column].getPiece(); }
 
 void Board::movePiece(Piece *piece, const Position& position, Player& player) {
+    bool shouldIncrement = true;
+    
     if(piece->getPieceCharacter() == 'P' || piece->getPieceCharacter() == 'p') {
         Pawn* pawn = dynamic_cast<Pawn*>(piece);
         if(pawn) {
+            shouldIncrement = false; // Don't increment half move clock for pawn
+            halfMoveClock = 0; // Reset half move clock for pawn
             pawn->setHasMoved(true); // Set hasMoved to true for pawn
             Position currentPos = pawn->getPosition();
             if(position.Y - currentPos.Y == 2 || position.Y - currentPos.Y == -2) {
@@ -91,8 +115,13 @@ void Board::movePiece(Piece *piece, const Position& position, Player& player) {
     }
     removePiece(piece->getPosition());
     if(isSquareOccupied(position)) {
+        shouldIncrement = false;
+        halfMoveClock = 0; // Reset half move clock if a piece is captured
         player.addCapturedPiece(getPiece(position)); // Add captured piece to player
         removePiece(position); // Remove existing piece if occupied
+    }
+    if(shouldIncrement) {
+        halfMoveClock++; // Increment half move clock
     }
     squares[position.X][position.Y].setPiece(piece); 
     piece->setPosition(position.X, position.Y); // Update piece position
@@ -109,7 +138,7 @@ void Board::movePieceTemp(Piece *piece, const Position& position) {
 
 void Board::removePiece(const Position& position) { squares[position.X][position.Y].setPiece(nullptr); }
 
-bool Board::isSquareOccupied(const Position& position) const { return getPiece(position);}
+bool Board::isSquareOccupied(const Position& position) const { return (getPiece(position) != nullptr);}
 
 std::vector<Piece*> Board::getAllPieces() const {
     std::vector<Piece*> pieces;
@@ -264,4 +293,17 @@ Position Board::getKingPosition(Color color) const {
         }
     }
     return Position(-1, -1); // Return an invalid position if not found, not possible in a valid game
+}
+
+std::vector<Piece*> Board::getAllPiecesOfColorAndType(Color color, PieceType type) const {
+    std::vector<Piece*> pieces;
+    for(int i = 0; i < BOARD_ROWS; i++) {
+        for(int j = 0; j < BOARD_COLS; j++) {
+            Piece* piece = getPiece(i , j);
+            if(piece != nullptr && piece->getColor() == color && piece->getType() == type) {
+                pieces.push_back(piece);
+            }
+        }
+    }
+    return pieces;
 }

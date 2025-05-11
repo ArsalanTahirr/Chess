@@ -15,6 +15,6 @@ public:
     void AddPiecePlacement(Board* board);
     void AddCurrentPlayer(Player& player);
     void AddCastlingRights(Board* board);
-    void AddEnPassantRights(Board* board);
+    void AddEnPassantRights(Board* board, Player& player);
     std::string getStateString() const;
 };

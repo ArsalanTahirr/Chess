@@ -30,6 +30,7 @@ std::vector<Position> Pawn::getValidMoves(Board* board) const {
        isPiecePinnedHorizontally(board)) {
         return validMoves; // No valid moves if pinned
     }
+    
     int row = position.X;
     int col = position.Y;
     
@@ -56,9 +57,11 @@ std::vector<Position> Pawn::getValidMoves(Board* board) const {
         if (pieceAtLeft && pieceAtLeft->getColor() != color) {
             validMoves.push_back(leftCapture);
         } 
-        else if (enPassantPiece && enPassantPiece->getColor() != color && 
-                   dynamic_cast<Pawn*>(enPassantPiece)->getCanCaptureWithEnPassant()) {
-            validMoves.push_back(Position(row - 1, col + direction));
+        else if (enPassantPiece && enPassantPiece->getColor() != color) {
+            Pawn* pawn = dynamic_cast<Pawn*>(enPassantPiece);
+            if (pawn && pawn->getCanCaptureWithEnPassant()) {
+                validMoves.push_back(Position(row - 1, col + direction));
+            }
         }
     }
     
@@ -68,9 +71,11 @@ std::vector<Position> Pawn::getValidMoves(Board* board) const {
         if (pieceAtRight && pieceAtRight->getColor() != color) {
             validMoves.push_back(rightCapture);
         } 
-        else if (enPassantPiece && enPassantPiece->getColor() != color && 
-                   dynamic_cast<Pawn*>(enPassantPiece)->getCanCaptureWithEnPassant()) {
-            validMoves.push_back(Position(row + 1, col + direction));
+        else if (enPassantPiece && enPassantPiece->getColor() != color) {
+            Pawn* pawn = dynamic_cast<Pawn*>(enPassantPiece);
+            if (pawn && pawn->getCanCaptureWithEnPassant()) {
+                validMoves.push_back(Position(row + 1, col + direction));
+            }
         }
     }
     
@@ -78,47 +83,61 @@ std::vector<Position> Pawn::getValidMoves(Board* board) const {
 }
 
 bool Pawn::canAttack(const Position& to, Board* board) const {
+    // First check: If there's no piece at the target location, this might be an en passant capture
+    // which should be handled in a special way, so don't return false immediately
     Piece* targetPiece = board->getPiece(to);
-    if (targetPiece == nullptr) {
-        return false; // No piece to attack
+    if (targetPiece != nullptr) {
+        // There is a piece at target position
+        if (targetPiece->getColor() == color) {
+            return false; // Cannot attack own piece
+        }
     }
-    if (targetPiece->getColor() == color) {
-        return false; // Cannot attack own piece
-    }
-    std::vector<Position> validMoves;
 
+    // Collect all valid attack positions
+    std::vector<Position> validMoves;
     int row = position.X;
     int col = position.Y;
-    
     int direction = (color == Color::White) ? 1 : -1;
     
+    // Check diagonal captures only
     Position leftCapture(row - 1, col + direction);
     Position rightCapture(row + 1, col + direction);
     
+    // Check normal left capture
     if (isInBounds(leftCapture)) {
         Piece* pieceAtLeft = board->getPiece(leftCapture);
-        Piece* enPassantPiece = board->getPiece(Position(row - 1, col));
         if (pieceAtLeft && pieceAtLeft->getColor() != color) {
             validMoves.push_back(leftCapture);
-        } 
-        else if (enPassantPiece && enPassantPiece->getColor() != color && 
-                   dynamic_cast<Pawn*>(enPassantPiece)->getCanCaptureWithEnPassant()) {
-            validMoves.push_back(Position(row - 1, col + direction));
+        }
+        
+        // Check left en passant capture
+        Piece* enPassantPiece = board->getPiece(Position(row - 1, col));
+        if (enPassantPiece && enPassantPiece->getColor() != color) {
+            Pawn* pawn = dynamic_cast<Pawn*>(enPassantPiece);
+            if (pawn && pawn->getCanCaptureWithEnPassant()) {
+                validMoves.push_back(Position(row - 1, col + direction));
+            }
         }
     }
     
+    // Check normal right capture
     if (isInBounds(rightCapture)) {
         Piece* pieceAtRight = board->getPiece(rightCapture);
-        Piece* enPassantPiece = board->getPiece(Position(row + 1, col));
         if (pieceAtRight && pieceAtRight->getColor() != color) {
             validMoves.push_back(rightCapture);
-        } 
-        else if (enPassantPiece && enPassantPiece->getColor() != color && 
-                   dynamic_cast<Pawn*>(enPassantPiece)->getCanCaptureWithEnPassant()) {
-            validMoves.push_back(Position(row + 1, col + direction));
+        }
+        
+        // Check right en passant capture
+        Piece* enPassantPiece = board->getPiece(Position(row + 1, col));
+        if (enPassantPiece && enPassantPiece->getColor() != color) {
+            Pawn* pawn = dynamic_cast<Pawn*>(enPassantPiece);
+            if (pawn && pawn->getCanCaptureWithEnPassant()) {
+                validMoves.push_back(Position(row + 1, col + direction));
+            }
         }
     }
 
+    // Check if the target position is in the valid moves
     for (const Position& move : validMoves) {
         if (move == to) {
             return true; // Pawn can attack the target position

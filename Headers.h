@@ -14,7 +14,6 @@
 #include "Square.h"
 #include "Player.h"
 #include "Move.h"
-#include "MoveHistory.h"
 #include "Pawn.h"
 #include "Knight.h"
 #include "Bishop.h"
@@ -23,5 +22,7 @@
 #include "King.h"
 #include "ChessRules.h"
 #include "StateString.h"
+#include "InputParser.h"
+#include "Game.h"
 #include "GlobalVariables.h"
 using namespace std;

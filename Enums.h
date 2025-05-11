@@ -6,10 +6,22 @@ enum class Color {
 };
 
 enum class PieceType {
+    None,
     King,
     Queen,
     Rook,
     Bishop,
     Knight,
     Pawn
+};
+
+
+enum class GameState {
+    NOT_STARTED,
+    IN_PROGRESS,
+    CHECK,
+    CHECKMATE,
+    STALEMATE,
+    DRAW,
+    RESIGNED
 };
