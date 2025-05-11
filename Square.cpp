@@ -4,7 +4,7 @@
 Square::Square(): position(Position(0, 0)), piece(nullptr), color(Color::White) {}
 
 Square::Square(const Position& position, Piece *piece): position(position), piece(piece) {
-    if((position.getRow() + position.getColumn()) % 2 == 0) color = Color::Black;
+    if((position.X + position.Y) % 2 == 0) color = Color::Black;
     else color = Color::White;
 }
 

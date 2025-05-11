@@ -1,9 +1,6 @@
 # Compiler to use
 CC = g++
 
-# Compiler flags
-CFLAGS = -std=c++17 -Wall
-
 # Target executable name
 TARGET = chess.exe
 
@@ -22,7 +19,7 @@ $(TARGET): $(OBJECTS)
 
 # Compile source files to object files
 %.o: %.cpp
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) -c $< -o $@
 
 # Clean up
 clean:

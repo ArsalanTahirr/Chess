@@ -14,5 +14,7 @@ public:
     void setHasMoved(bool moved);
     bool getHasMoved() const;
     std::vector<Position> getValidMoves(Board* board) const override;
-    bool canCastle() const;
+    bool canCastleKS(Board* board) const;
+    bool canCastleQS(Board* board) const;
+    bool canAttack(const Position& to, Board* board) const override;
 };

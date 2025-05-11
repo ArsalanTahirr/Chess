@@ -2,21 +2,21 @@
 #include <utility>
 #include "Position.h"
 
-Position::Position(int row, int column): row(row), column(column) {}
+Position::Position(): X(-1), Y(-1) {}
+
+Position::Position(const int X, const int Y): X(X), Y(Y) {}
 
 Position::~Position() {}
 
-int Position::getRow() const { return row; }
-
-int Position::getColumn() const { return column; }
-
-std::pair<int,int> Position::getCoordinate() const { return std::make_pair(row, column); }
-
-void Position::setCoordinate(int row, int column) {
-    this->row = row;
-    this->column = column;
+void Position::setCoordinate(const int X, const int Y) {
+    this->X = X;
+    this->Y = Y;
 }
 
-bool Position::operator== (const Position& obj) {
-    return row == obj.row && column == obj.column;
+bool Position::operator== (const Position& obj) const {
+    return X == obj.X && Y == obj.Y;
+}
+
+bool Position::operator!= (const Position& obj) const {
+    return !(*this == obj);
 }

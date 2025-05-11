@@ -1,15 +1,13 @@
 #pragma once
 
 class Position {
-private:
-    int row;
-    int column;
 public:
-    Position(int row, int column);
+    int X;
+    int Y;
+    Position();
+    Position(const int X, const int Y);
     ~Position();
-    int getRow() const;
-    int getColumn() const;
-    std::pair<int,int> getCoordinate() const;
-    void setCoordinate(int row, int column);
-    bool operator== (const Position& obj);
+    void setCoordinate(const int X, const int Y);
+    bool operator== (const Position& obj) const;
+    bool operator!= (const Position& obj) const;
 };

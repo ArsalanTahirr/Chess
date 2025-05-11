@@ -21,4 +21,7 @@
 #include "Rook.h"
 #include "Queen.h"
 #include "King.h"
+#include "ChessRules.h"
+#include "StateString.h"
+#include "GlobalVariables.h"
 using namespace std;

@@ -10,4 +10,5 @@ public:
     Queen(Color color, const char character, const Position& position);
     ~Queen();
     std::vector<Position> getValidMoves(Board* board) const override;
+    bool canAttack(const Position& to, Board* board) const override;
 };

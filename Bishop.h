@@ -10,4 +10,5 @@ public:
     Bishop(Color color, const char character, const Position& position);
     ~Bishop();
     std::vector<Position> getValidMoves(Board* board) const override;
+    bool canAttack(const Position& to, Board* board) const override;
 };
