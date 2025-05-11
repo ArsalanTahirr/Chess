@@ -24,6 +24,7 @@ public:
     void startGame();
     void playGame();
     void makeMove(Move& move);
+    void resetEnpassantAbility(Piece* piece);
     void setError(const std::string& error);
     void clearError();
     void setMouseInputMode(bool useMouseInput);

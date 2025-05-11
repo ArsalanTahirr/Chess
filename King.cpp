@@ -5,6 +5,7 @@
 #include "Position.h"
 #include "Board.h"
 #include "Rook.h"
+#include "Enums.h"
 #include "GlobalVariables.h"
 
 King::King(Color color, const char character, const Position& position):
@@ -14,7 +15,7 @@ King::~King() {}
 
 std::vector<Position> King::getValidMoves(Board* board) const {
     std::vector<Position> ValidMoves;
-    std::vector<Piece*> AllPieces = board->getAllPieces();
+    std::vector<Piece*> AllPieces = board->getAllPiecesOfColor(color == Color::White ? Color::Black : Color::White);
     int row = position.X;
     int col = position.Y;
     int directions[8][2] = {
@@ -22,16 +23,16 @@ std::vector<Position> King::getValidMoves(Board* board) const {
         { 0, -1},          { 0, 1},
         { 1, -1}, { 1, 0}, { 1, 1}
     };
-    for (int *dir : directions) {
-        int newRow = row + dir[0];
-        int newCol = col + dir[1];
+    for (int i = 0; i < 8; i++) {
+        int newRow = row + directions[i][0];
+        int newCol = col + directions[i][1];
         Position newPosition(newRow, newCol);
         if (!isInBounds(newRow, newCol)) {
             continue;
         }
         bool flag = false;
         for(Piece* piece: AllPieces) {
-            if(piece->canAttack(newPosition, board) && piece->getColor() != color) {
+            if(piece->canAttack(newPosition, board)) {
                 flag = true;
                 break;
             }

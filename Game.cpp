@@ -126,111 +126,109 @@ void Game::startGame() {
 
 void Game::playGame() {
     bool gameOver = false;
+    bool waitingForSecondClick = false; // Add flag to track if we're waiting for second click
     
     while (!gameOver) {
-        // Check game end conditions first
-        // Check if current player is in checkmate
-        bool isCurrentPlayerInCheckmate = ChessRules::isCheckmate(currentPlayer->getColor(), board);
-        if(isCurrentPlayerInCheckmate) {
+        // Only check game end conditions and redraw if not waiting for second click
+        if (!waitingForSecondClick) {
+            // Check game end conditions
+            if(ChessRules::isStalemate(currentPlayer->getColor(), board)) {
+                // Clear the screen completely
+                system("cls");
+                
+                // Print the board
+                board->printBoard();
+                
+                // Ensure console is properly positioned
+                std::cout << std::endl;
+                
+                // Display stalemate message
+                HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+                SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+                std::cout << std::endl;
+                std::cout << " ♖ STALEMATE! ♖" << std::endl;
+                SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+                
+                std::cout << " " << currentPlayer->getName() << " has no legal moves!" << std::endl;
+                std::cout << " The game is a draw!" << std::endl;
+                
+                gameOver = true;
+                break;
+            }
+
+            std::pair<bool, std::string> drawResult = ChessRules::isDraw(moveHistory, board);
+
+            if (drawResult.first) {
+                // Clear the screen completely
+                system("cls");
+                
+                // Print the board
+                board->printBoard();
+                
+                // Ensure console is properly positioned
+                std::cout << std::endl;
+                
+                // Display draw message
+                HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+                SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+                std::cout << std::endl;
+                std::cout << " ♘ DRAW! ♘" << std::endl;
+                SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+                
+                std::cout << " " << drawResult.second << std::endl;
+                
+                gameOver = true;
+                break;
+            }
+
+            // Check for check
+            bool isInCheck = ChessRules::isCheck(currentPlayer->getColor(), board);
+            
+            // Clear the screen completely
+            system("cls");
+            
+            // Print the board
             board->printBoard();
             
-            // Display checkmate message
+            // Display current player and check status
             HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
-            SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY);
-            std::cout << std::endl;
-            std::cout << " ♚ CHECKMATE! ♚" << std::endl;
+            if (currentPlayer->getColor() == Color::White) {
+                SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+            } else {
+                SetConsoleTextAttribute(console, FOREGROUND_INTENSITY);
+            }
+            
+            std::cout << std::endl << " " << currentPlayer->getName() << "'s turn (";
+            std::cout << (currentPlayer->getColor() == Color::White ? "White" : "Black") << ")" << std::endl;
+            
+            if (isInCheck) {
+                SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY);
+                std::cout << " YOUR KING IS IN CHECK! You must address this threat." << std::endl;
+            }
+            
             SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
             
-            std::cout << " " << currentPlayer->getName() << " is in checkmate!" << std::endl;
-            
-            // Display winner
-            Player* winner = (currentPlayer == whitePlayer) ? blackPlayer : whitePlayer;
-            SetConsoleTextAttribute(console, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
-            std::cout << " " << winner->getName() << " wins the game!" << std::endl;
-            SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-            
-            gameOver = true;
-            break;
-        }
-        
-        if(ChessRules::isStalemate(currentPlayer->getColor(), board)) {
-            board->printBoard();
-            
-            // Display stalemate message
-            HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
-            SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
-            std::cout << std::endl;
-            std::cout << " ♖ STALEMATE! ♖" << std::endl;
-            SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-            
-            std::cout << " " << currentPlayer->getName() << " has no legal moves!" << std::endl;
-            std::cout << " The game is a draw!" << std::endl;
-            
-            gameOver = true;
-            break;
-        }
-
-        std::pair<bool, std::string> drawResult = ChessRules::isDraw(moveHistory, board);
-
-        if (drawResult.first) {
-            board->printBoard();
-            
-            // Display draw message
-            HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
-            SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
-            std::cout << std::endl;
-            std::cout << " ♘ DRAW! ♘" << std::endl;
-            SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-            
-            std::cout << " " << drawResult.second << std::endl;
-            
-            gameOver = true;
-            break;
-        }
-
-        // Check for check
-        bool isInCheck = ChessRules::isCheck(currentPlayer->getColor(), board);
-        
-        board->printBoard();
-        
-        // Display current player and check status
-        HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
-        if (currentPlayer->getColor() == Color::White) {
-            SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-        } else {
-            SetConsoleTextAttribute(console, FOREGROUND_INTENSITY);
-        }
-        
-        std::cout << std::endl << " " << currentPlayer->getName() << "'s turn (";
-        std::cout << (currentPlayer->getColor() == Color::White ? "White" : "Black") << ")" << std::endl;
-        
-        if (isInCheck) {
-            SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY);
-            std::cout << " YOUR KING IS IN CHECK! You must address this threat." << std::endl;
-        }
-        
-        SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-        
-        if (hasError) {
-            SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY);
-            std::cout << " Error: " << lastErrorMessage << std::endl;
-            SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-            clearError();
+            if (hasError) {
+                SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY);
+                std::cout << " Error: " << lastErrorMessage << std::endl;
+                SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+                clearError();
+            }
         }
 
         Move move;
         
-        // Prompt for move
-        if (useMouseInput) {
+        // Prompt for move if not waiting for second click
+        if (!waitingForSecondClick && useMouseInput) {
             std::cout << " Please click on a piece to move..." << std::endl;
-        } else {
-            std::cout << " Enter your move: ";
         }
         
         // Use appropriate input method
         try {
             if (useMouseInput) {
                 move = inputParser->takeMouseInput();
+                // If we get here with waitingForSecondClick=true, it means we got the second click
+                waitingForSecondClick = false;
             } else {
                 move = inputParser->takeInput();
             }
@@ -238,11 +236,12 @@ void Game::playGame() {
         catch (std::invalid_argument &e) {
             std::string errorMsg = e.what();
             // Special case for the "Continue with selecting destination" message
-            // which is used to indicate that we're waiting for the second click
             if (errorMsg == "Continue with selecting destination") {
+                waitingForSecondClick = true; // Set flag instead of using continue
                 continue;
             }
             setError(errorMsg);
+            waitingForSecondClick = false; // Reset flag on error
             continue; // Skip to the next iteration if input is invalid
         }
 
@@ -251,6 +250,7 @@ void Game::playGame() {
             try {
                 ChessRules::handleCastlingKingSide(*currentPlayer, board);
                 moveSuccessful = true;
+                std::cout << "\n Kingside castling performed" << std::endl;
             }
             catch (std::invalid_argument &e) {
                 setError(e.what());
@@ -261,6 +261,7 @@ void Game::playGame() {
             try {
                 ChessRules::handleCastlingQueenSide(*currentPlayer, board);
                 moveSuccessful = true;
+                std::cout << "\n Queenside castling performed" << std::endl;
             }
             catch (std::invalid_argument &e) {
                 setError(e.what());
@@ -292,6 +293,7 @@ void Game::playGame() {
         // Only update the move history if the move was successful
         if (moveSuccessful) {
             // Add the current state to the move history
+            resetEnpassantAbility(board->getPiece(move.getTo()));
             moveHistory.push_back(StateString(*currentPlayer, board));
             
             // Explicitly check if the current player is now in checkmate after the move
@@ -299,7 +301,14 @@ void Game::playGame() {
             bool isOpponentInCheckmate = ChessRules::isCheckmate(opponent->getColor(), board);
             
             if (isOpponentInCheckmate) {
+                // Clear the screen completely
+                system("cls");
+                
+                // Print the board
                 board->printBoard();
+                
+                // Ensure console is properly positioned
+                std::cout << std::endl;
                 
                 // Display checkmate message
                 HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -335,55 +344,79 @@ void Game::playGame() {
 
 void Game::makeMove(Move& move) {
     Piece* pieceToMove = board->getPiece(move.getFrom());
-    if (!pieceToMove) {
-        throw std::invalid_argument("No piece at source position.");
+    if(!pieceToMove) {
+        throw std::invalid_argument("Cannot move opponent's piece.");
     }
-    
     if (pieceToMove->getColor() != currentPlayer->getColor()) {
         throw std::invalid_argument("Cannot move opponent's piece.");
     }
-
-    if(pieceToMove->canMove(move.getTo(), board)) {
+    if (pieceToMove->canMove(move.getTo(),board)) {
         // Save original position for logging
         Position fromPos = pieceToMove->getPosition();
         Position toPos = move.getTo();
-        
-        // Check for en passant capture
-        if (pieceToMove->getType() == PieceType::Pawn) {
-            Pawn* pawn = dynamic_cast<Pawn*>(pieceToMove);
-            // If this is a diagonal move to an empty square, it might be an en passant capture
-            if (fromPos.X != toPos.X && !board->isSquareOccupied(toPos)) {
-                // Check if there's a pawn that can be captured via en passant
-                Position capturedPawnPos(toPos.X, fromPos.Y);
-                Piece* potentialCapture = board->getPiece(capturedPawnPos);
+
+        Piece* capturedPiece = board->getPiece(toPos);
+
+        board->movePieceTemp(pieceToMove, toPos);
+        // Check if the move puts the player's own king in check
+        bool putsOwnKingInCheck = ChessRules::isCheck(currentPlayer->getColor(), board);
+        // Restore the board to its original state
+        board->movePieceTemp(pieceToMove, fromPos);
+        // Restore captured piece if any
+        if (capturedPiece) {
+            board->movePieceTemp(capturedPiece, toPos);
+        }
+        // If the move puts the player's own king in check, it's illegal
+        if (putsOwnKingInCheck) {
+            throw std::invalid_argument("This move would put your king in check.");
+        }
+
+
+        Piece* currentPiece = board->getPiece(move.getFrom());
+        if (currentPiece && currentPiece->getType() == PieceType::Pawn && !capturedPiece && fromPos.X != toPos.X) {
+            if(currentPlayer->getColor() == Color::White) {
+                Position enPassantCapturePos(toPos.X, toPos.Y - 1);
+                Piece* potentialCapture = board->getPiece(enPassantCapturePos);
                 if (potentialCapture && potentialCapture->getType() == PieceType::Pawn) {
                     Pawn* capturedPawn = dynamic_cast<Pawn*>(potentialCapture);
                     if (capturedPawn && capturedPawn->getCanCaptureWithEnPassant()) {
-                        // Add the pawn to captured pieces
+                        board->removePiece(enPassantCapturePos);
                         currentPlayer->addCapturedPiece(potentialCapture);
-                        // Remove the captured pawn from the board
-                        board->removePiece(capturedPawnPos);
+                    }
+                }
+            } else {
+                Position enPassantCapturePos(toPos.X, toPos.Y + 1);
+                Piece* potentialCapture = board->getPiece(enPassantCapturePos);
+                if (potentialCapture && potentialCapture->getType() == PieceType::Pawn) {
+                    Pawn* capturedPawn = dynamic_cast<Pawn*>(potentialCapture);
+                    if (capturedPawn && capturedPawn->getCanCaptureWithEnPassant()) {
+                        board->removePiece(enPassantCapturePos);
+                        currentPlayer->addCapturedPiece(potentialCapture);
                     }
                 }
             }
         }
-        
-        // Execute the move
-        board->movePiece(pieceToMove, toPos, *currentPlayer);
-        
-        // Reset all en passant flags on opponent pawns after move
-        Color opponentColor = (currentPlayer->getColor() == Color::White) ? Color::Black : Color::White;
-        std::vector<Piece*> opponentPieces = board->getAllPiecesOfColor(opponentColor);
-        for (Piece* piece : opponentPieces) {
-            if (piece->getType() == PieceType::Pawn) {
-                Pawn* pawn = dynamic_cast<Pawn*>(piece);
-                if (pawn) {
-                    pawn->setCanCaptureWithEnPassant(false);
-                }
-            }
-        }
-    } 
+        board->movePiece(pieceToMove, move.getTo(), *currentPlayer);
+    }
     else {
         throw std::invalid_argument("Invalid move for the piece.");
+    }
+}
+
+void Game::resetEnpassantAbility(Piece* lastMovedPiece) {
+    // Check if lastMovedPiece is valid
+    if (!lastMovedPiece) {
+        return;
+    }
+    
+    // Reset the en passant ability for all pawns except the one that just moved
+    std::vector<Piece*> allPieces = board->getAllPieces();
+    for (Piece* piece : allPieces) {
+        if (piece->getType() == PieceType::Pawn && piece != lastMovedPiece) {
+            Pawn* pawn = dynamic_cast<Pawn*>(piece);
+            if (pawn) {
+                pawn->setCanCaptureWithEnPassant(false);
+            }
+        }
     }
 }

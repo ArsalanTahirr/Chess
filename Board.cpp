@@ -96,7 +96,9 @@ void Board::movePiece(Piece *piece, const Position& position, Player& player) {
             halfMoveClock = 0; // Reset half move clock for pawn
             pawn->setHasMoved(true); // Set hasMoved to true for pawn
             Position currentPos = pawn->getPosition();
-            if(position.Y - currentPos.Y == 2 || position.Y - currentPos.Y == -2) {
+            // Check if pawn moved two squares forward (different for white and black)
+            if((pawn->getColor() == Color::White && position.Y - currentPos.Y == 2) || 
+               (pawn->getColor() == Color::Black && currentPos.Y - position.Y == 2)) {
                 pawn->setCanCaptureWithEnPassant(true); // Set canCaptureWithEnPassant to true for pawn
             }
         }
@@ -182,7 +184,7 @@ void Board::resetColor(HANDLE console) const {
 }
 
 void Board::printBoard() const {
-    system("cls"); // Clear the console
+    // Don't clear the screen here, it's handled by the Game class
     HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
 
     // Set console code page to support Unicode characters
@@ -281,6 +283,9 @@ void Board::printBoard() const {
         }
     }
     std::cout << std::endl;
+    
+    // Add extra spacing after the board to prevent text overlap
+    std::cout << std::endl << std::endl;
 }
 
 Position Board::getKingPosition(Color color) const {

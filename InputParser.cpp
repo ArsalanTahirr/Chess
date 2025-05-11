@@ -18,7 +18,7 @@ InputParser::InputParser(Board* board): board(board), firstClick(true) {}
 InputParser::~InputParser() {}
 
 Move InputParser::takeInput() {
-    std::cout << "Enter Move (or click on the board): ";
+    std::cout << "\n Enter Move: ";
     std::cin >> inputString;
 
     // Parse the input string into a Move object
@@ -49,7 +49,7 @@ Move InputParser::takeMouseInput() {
         firstClick = false;
         
         // Report piece selection in a clean way
-        std::cout << "Piece selected: " << char(fromPosition.X + 'a') << (fromPosition.Y + 1) << std::endl;
+        std::cout << "\n Piece selected: " << char(fromPosition.X + 'a') << (fromPosition.Y + 1) << std::endl;
         
         // Add a small delay to prevent accidental double clicks
         Sleep(200);
@@ -78,7 +78,7 @@ Move InputParser::takeMouseInput() {
         Piece* pieceAtFrom = board->getPiece(fromPosition);
         
         // Display the move being made
-        std::cout << "Move: " << char(fromPosition.X + 'a') << (fromPosition.Y + 1) 
+        std::cout << "\n Move: " << char(fromPosition.X + 'a') << (fromPosition.Y + 1) 
                   << " to " << char(toPosition.X + 'a') << (toPosition.Y + 1) << std::endl;
         
         // Check for pawn promotion
@@ -87,7 +87,7 @@ Move InputParser::takeMouseInput() {
                 (fromPosition.Y == 1 && toPosition.Y == 0)) {
                 
                 char promotionPiece;
-                std::cout << "Promote to (q=Queen, r=Rook, b=Bishop, n=Knight): ";
+                std::cout << "\n Promote to (q=Queen, r=Rook, b=Bishop, n=Knight): ";
                 std::cin >> promotionPiece;
                 promotionPiece = std::tolower(promotionPiece);
                 
@@ -112,6 +112,20 @@ Move InputParser::takeMouseInput() {
         move.setTo(toPosition);
         move.setPieceMoved(pieceAtFrom);
         move.setPieceCaptured(board->getPiece(toPosition));
+        
+        // Check for castling moves
+        if (pieceAtFrom && pieceAtFrom->getType() == PieceType::King) {
+            // If king is moving two squares horizontally, it's a castling move
+            if (abs(toPosition.X - fromPosition.X) == 2 && toPosition.Y == fromPosition.Y) {
+                if (toPosition.X > fromPosition.X) {
+                    // King is moving to the right - kingside castling
+                    move.setIsCastlingKingSide(true);
+                } else {
+                    // King is moving to the left - queenside castling
+                    move.setIsCastlingQueenSide(true);
+                }
+            }
+        }
         
         firstClick = true; // Reset for next move
         return move;

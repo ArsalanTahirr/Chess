@@ -75,23 +75,34 @@ void StateString::AddCastlingRights(Board* board) {
 }
 
 void StateString::AddEnPassantRights(Board* board, Player& player) {
+    // Look for pawns that can be captured via en passant
+    // These are opponent pawns that just moved two squares
     std::vector<Piece*> pieces = board->getAllPiecesOfColor(player.getColor() == Color::White ? Color::Black : Color::White);
     Position enPassantPos;
     bool flag = false;
+    
     for (Piece* piece : pieces) {
         if (piece->getType() == PieceType::Pawn) {
             Pawn* pawn = dynamic_cast<Pawn*>(piece);
             if (pawn && pawn->getCanCaptureWithEnPassant()) {
                 flag = true;
-                enPassantPos.setCoordinate(piece->getPosition());
+                Position pawnPos = piece->getPosition();
+                
+                // Calculate the en passant target square (behind the pawn)
+                int direction = (piece->getColor() == Color::White) ? -1 : 1;
+                enPassantPos.X = pawnPos.X;
+                enPassantPos.Y = pawnPos.Y + direction;
                 break;
             }
         }
     }
+    
     if (!flag) {
         stateString += "-";
         return;
     }
+    
+    // Convert to algebraic notation (a-h for files, 1-8 for ranks)
     char file = 'a' + enPassantPos.X;
     int rank = enPassantPos.Y + 1;
 

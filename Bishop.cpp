@@ -88,11 +88,7 @@ bool Bishop::canAttack(const Position& to, Board* board) const {
             
             // If there's a piece blocking the path
             if (pieceAtNewPos != nullptr) {
-                // If it's an opponent's piece in the target position, we can attack it
-                if (pieceAtNewPos->getColor() != color && newPos == to) {
-                    return true;
-                }
-                // Otherwise, we're blocked in this direction
+                // We're blocked in this direction
                 break;
             }
         }
