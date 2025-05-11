@@ -5,16 +5,16 @@ A fully-featured chess game implementation in C++ with a console-based UI, mouse
 ## Screenshots
 
 ### Loading Screen
-![Loading Screen](ScreenShot_1.png)
+![Loading Screen](Images/ScreenShot_1.png)
 
 ### Welcome Screen
-![Welcome Screen](ScreenShot_2.png)
+![Welcome Screen](Images/ScreenShot_2.png)
 
 ### Game Instructions
-![Game Instructions](ScreenShot_3.png)
+![Game Instructions](Images/ScreenShot_3.png)
 
 ### Chess Board
-![Chess Board](ScreenShot_4.png)
+![Chess Board](Images/ScreenShot_4.png)
 
 ## Features
 
