@@ -1,0 +1,30 @@
+# Ignore screenshots
+*.png
+
+# Ignore compiled files
+*.o
+*.exe
+*.out
+*.a
+*.so
+*.dylib
+
+# Ignore Visual Studio files
+*.vs/
+*.vscode/
+*.suo
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.pdb
+*.ilk
+*.log
+*.tlog/
+
+# Ignore temporary files
+*~
+*.swp
+*.swo
+.DS_Store
+Thumbs.db 
