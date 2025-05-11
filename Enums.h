@@ -13,14 +13,3 @@ enum class PieceType {
     Knight,
     Pawn
 };
-
-
-enum class GameState {
-    NOT_STARTED,
-    IN_PROGRESS,
-    CHECK,
-    CHECKMATE,
-    STALEMATE,
-    DRAW,
-    RESIGNED
-};
