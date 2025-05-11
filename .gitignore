@@ -1,6 +1,3 @@
-# Ignore screenshots
-*.png
-
 # Ignore compiled files
 *.o
 *.exe
