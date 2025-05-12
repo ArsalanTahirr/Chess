@@ -1,6 +1,6 @@
 # Chess Game
 
-A cross-platform chess game implementation in C++ featuring a clean architecture with separation of concerns.
+A cross-platform chess game implementation in C++ featuring a clean architecture with separation of concerns. This console-based chess application provides a complete implementation of chess rules with both mouse and keyboard input support.
 
 ## Screenshots
 
@@ -26,6 +26,8 @@ A cross-platform chess game implementation in C++ featuring a clean architecture
 - Check and checkmate detection
 - Stalemate and draw detection
 - Captured pieces tracking
+- Intuitive user interface with color-coded messages
+- Comprehensive error handling
 
 ## Architecture
 
@@ -37,6 +39,13 @@ The project follows a modular architecture with clear separation of concerns:
 - **Board Representation**: Manages the chess board state and piece positions
 - **Piece Hierarchy**: Object-oriented design for different chess pieces with polymorphic behavior
 - **UI Abstraction**: Platform-independent UI layer that separates rendering from game logic
+
+### Design Patterns
+
+- **Factory Pattern**: For creating different chess pieces
+- **Strategy Pattern**: For piece movement strategies
+- **Singleton Pattern**: For global game state management
+- **Observer Pattern**: For game state updates and UI notifications
 
 ### Directory Structure
 
@@ -52,7 +61,9 @@ Chess/
 │   ├── pieces/           # Chess piece implementations
 │   ├── utils/            # Utility implementations
 │   └── ui/               # UI implementations
-└── Makefile              # Build configuration
+├── images/               # Screenshot images
+├── Makefile              # Build configuration
+└── README.md             # Project documentation
 ```
 
 ## Building and Running
@@ -94,6 +105,28 @@ Display verbose compilation output:
 make V=1
 ```
 
+### Additional Makefile Commands
+
+View project structure:
+```
+make show-structure
+```
+
+List source files:
+```
+make show-sources
+```
+
+List header files:
+```
+make show-headers
+```
+
+Display help:
+```
+make help
+```
+
 ## Cross-Platform Support
 
 The game is designed to work seamlessly on both Windows and Unix-based systems:
@@ -114,12 +147,15 @@ The game supports two input methods:
 ### Mouse Input
 - Click on a piece to select it
 - Click on a destination square to move
+- Selected pieces are highlighted
+- Valid move destinations are indicated
 
 ### Text Input
 - Enter moves in algebraic notation (e.g., 'e2e4')
 - Type 'o-o' for kingside castling
 - Type 'o-o-o' for queenside castling
 - For pawn promotion, use format 'e7e8=Q' (replace Q with desired piece)
+- Type 'quit' or 'exit' to end the game
 
 ## UI Abstraction Layer
 
@@ -131,10 +167,36 @@ The `ChessUI` class provides a clean abstraction between game logic and renderin
 - **Enhanced Maintainability**: Makes it easier to modify UI without affecting game rules
 
 Key UI methods:
-- Board rendering
-- Message display
+- Board rendering with Unicode chess symbols
+- Color-coded message display
 - Game state visualization
-- Input handling
+- Input handling for both mouse and keyboard
+- Cross-platform terminal configuration
+
+## Technical Implementation
+
+### Chess Rules Implementation
+
+The game implements all standard chess rules including:
+
+- Piece movement validation
+- Check and checkmate detection
+- Castling with proper validation
+- En passant captures
+- Pawn promotion
+- Stalemate and draw conditions
+- Fifty-move rule
+- Threefold repetition
+
+### Cross-Platform Compatibility
+
+The application achieves cross-platform compatibility through:
+
+- Conditional compilation with preprocessor directives
+- Platform-specific implementations wrapped in common interfaces
+- Unicode support for chess symbols
+- ANSI color codes for Unix terminals
+- Windows Console API for Windows systems
 
 ## Contributors
 
