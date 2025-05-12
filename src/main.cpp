@@ -1,47 +1,59 @@
 #include "../include/Headers.h"
 #include "../include/ui/ChessUI.h"
 #include <iomanip>
-#include <windows.h>
-#include <fcntl.h>
-#include <io.h>
 
+// Platform-specific includes
+#ifdef _WIN32
+#include <windows.h>  // Windows API for console handling
+#include <fcntl.h>    // File control options
+#include <io.h>       // Low-level I/O
+#else
+#include <unistd.h>   // POSIX operating system API
+#endif
+
+/**
+ * Main entry point for the Chess application
+ * 
+ * Initializes the UI and game components, displays the menu,
+ * handles input mode selection, and starts the game loop.
+ */
 int main() {
-    // Create UI instance
+    // Initialize the UI system with cross-platform support
     ChessUI ui;
     
-    // Set up the console for better appearance
+    // Configure console appearance
     ui.setConsoleTitle();
     ui.setConsoleSize();
     
-    // Display the intro
+    // Show the application intro screen
     ui.displayIntro();
     
-    // Create the game instance
+    // Initialize the chess game engine
     Game game;
     
-    // Display the main menu
+    // Display main menu with input options
     ui.displayMainMenu();
     
-    // Configure input mode
+    // Get user's preferred input method (mouse or text)
     char inputMode;
     std::cout << "  Select option (1-2): ";
     std::cin >> inputMode;
-    std::cin.clear(); // Clear any input errors
+    std::cin.clear();           // Clear any input errors
     std::cin.ignore(9999, '\n'); // Clear the input buffer
     
-    // Set the input mode
+    // Configure the game based on selected input mode
     if (inputMode == '2') {
-        game.setMouseInputMode(false); // Use text input
+        game.setMouseInputMode(false); // Use text-based algebraic notation input
     } else if (inputMode != '1') {
-        // Default to mouse input if invalid input
+        // Default to mouse input for invalid selections
         std::cout << "  Invalid option, defaulting to mouse input." << std::endl;
         std::cout << "  Press Enter to continue...";
         std::cin.get();
     }
     
-    // Start and play the game
-    game.startGame();
-    game.playGame();
+    // Initialize the game state and start the main game loop
+    game.startGame();  // Set up the board, pieces, and players
+    game.playGame();   // Begin the turn-based gameplay loop
     
     return 0;
 }
