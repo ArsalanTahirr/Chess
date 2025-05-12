@@ -5,7 +5,6 @@
 *.a
 *.so
 *.dylib
-*.code-workspace
 
 # Ignore Visual Studio files
 *.vs/

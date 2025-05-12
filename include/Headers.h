@@ -1,0 +1,29 @@
+#pragma once
+
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+#include <cctype>
+#include <utility>
+#include <windows.h>
+#include "core/Board.h"
+#include "Enums.h"
+#include "pieces/Piece.h"
+#include "core/Position.h"
+#include "core/Square.h"
+#include "core/Player.h"
+#include "core/Move.h"
+#include "pieces/Pawn.h"
+#include "pieces/Knight.h"
+#include "pieces/Bishop.h"
+#include "pieces/Rook.h"
+#include "pieces/Queen.h"
+#include "pieces/King.h"
+#include "core/ChessRules.h"
+#include "core/StateString.h"
+#include "ui/InputParser.h"
+#include "core/Game.h"
+#include "utils/GlobalVariables.h"
+#include "ui/ChessUI.h"
+using namespace std;
