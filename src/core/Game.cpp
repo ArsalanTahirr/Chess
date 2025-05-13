@@ -234,7 +234,6 @@ void Game::playGame() {
     // Clear input buffer and wait for Enter
     std::cin.clear();
     std::cin.ignore(9999, '\n');
-    std::cin.get(); // Added extra waiting for input to ensure the program doesn't exit prematurely
 }
 
 void Game::makeMove(Move& move) {
