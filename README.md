@@ -200,11 +200,9 @@ The application achieves cross-platform compatibility through:
 
 ## Contributors
 
-This project was developed by Computer Science students at FAST University Karachi:
+This project was developed by:
 
 - **Arsalan Tahir**
-- **Wajiha Hassan**
-- **Narmeen Zehra**
 
 ## License
 
