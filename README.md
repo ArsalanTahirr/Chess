@@ -200,7 +200,7 @@ The application achieves cross-platform compatibility through:
 
 ## Contributors
 
-This project was developed by:
+This project was developed by a student at FAST University Karachi:
 
 - **Arsalan Tahir**
 
