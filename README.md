@@ -207,7 +207,3 @@ This project was developed by a student at FAST University Karachi:
 ## License
 
 This project is open source and available under the MIT License.
-
-## Acknowledgments
-
-Special thanks to our instructors at FAST University for their guidance and support throughout the development of this project.
